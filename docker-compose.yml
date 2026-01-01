@@ -1,0 +1,16 @@
+services:
+  lens-webtop:
+    image: eacer:web-lens-ide:latest
+    container_name: lens-webtop
+    privileged: false
+    environment:
+      - TZ=Asia/Manila
+      - SUBFOLDER=/
+      - TITLE=web-lens IDE
+    volumes:
+      - ./config:/config
+      - ~/.kube:/config/.kube:ro
+    ports:
+      - 3001:3001
+    shm_size: "2gb"
+    restart: unless-stopped

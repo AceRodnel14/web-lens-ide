@@ -1,0 +1,44 @@
+include:
+  - project: 'acerodnel/gitlab-actions'
+    file: 'jobs/conditions.run.yml'
+  - project: 'acerodnel/gitlab-actions'
+    file: 'jobs/docker.yml'
+  - project: 'acerodnel/gitlab-actions'
+    file: 'jobs/sync.github.yml'
+
+stages:
+  - validate
+  - build
+  - sync
+  - cleanup
+
+sync_to_github:
+  extends: 
+    - .sync_to_github
+    - .dont_run_when_github_sync_and_tagged
+  stage: sync
+
+docker_cleanup:
+  extends: 
+    - .docker_cleanup
+    - .dont_run_when_github_sync
+  stage: cleanup
+
+check_container_build:
+  extends:
+    - .docker_validate_build
+    - .dont_run_when_github_sync
+  stage: validate
+
+check_docker_compose_file:
+  extends:
+    - .docker_validate_compose_file
+    - .dont_run_when_github_sync
+  stage: validate
+
+create_dockerhub_container_image:
+  extends:
+    - .docker_login_dockerhub
+    - .docker_build_container_amd64_only
+    - .dont_run_when_github_sync
+  stage: build
