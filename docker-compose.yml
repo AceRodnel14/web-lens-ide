@@ -1,7 +1,7 @@
 services:
-  lens-webtop:
-    image: eacer:web-lens-ide:latest
-    container_name: lens-webtop
+  web-lens-ide:
+    image: eacer/web-lens-ide:latest
+    container_name: web-lens-ide
     privileged: false
     environment:
       - TZ=Asia/Manila
